@@ -27,7 +27,7 @@ const JobDetails = () => {
 
   return (
       <div className="flex flex-col md:flex-row justify-around gap-5  items-center min-h-[calc(100vh-306px)] md:max-w-screen-xl mx-auto ">
-          {/* Job Details */}
+          {/* Job Details  */}
           <div className="flex-1  px-4 py-7 bg-white rounded-md shadow-md md:min-h-[350px]">
               <div className="flex items-center justify-between">
                   {deadline && <span className="text-sm font-light text-gray-800 ">Deadline: {format(new Date(deadline), 'P')}</span>}
