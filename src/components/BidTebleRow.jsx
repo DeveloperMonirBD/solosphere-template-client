@@ -1,7 +1,7 @@
-import { format } from "date-fns";
+import { format } from 'date-fns';
 
-const BidTebleRow = ({ bid }) => {
-    const {title, deadline, category, status, price} = bid || {}
+const BidTebleRow = ({ bid, handleStatusChange }) => {
+    const { _id, title, deadline, category, status, price } = bid || {};
     return (
         <tr>
             <td className="px-4 py-4 text-sm text-gray-500  whitespace-nowrap">{title}</td>
@@ -21,14 +21,25 @@ const BidTebleRow = ({ bid }) => {
             </td>
 
             <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
-                <div className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-yellow-100/60 text-yellow-500`}>
-                    <span className={`h-1.5 w-1.5 rounded-full bg-yellow-500 `}></span>
+                <div
+                    className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2 ${status === 'Pending' && 'bg-yellow-100/60 text-yellow-500'} ${
+                        status === 'In Progress' && 'bg-blue-100/60 text-blue-500'
+                    } ${status === 'Completed' && 'bg-green-100/60 text-green-500'} ${status === 'Rejected' && 'bg-red-100/60 text-red-500'}`}>
+                    <span
+                        className={`h-1.5 w-1.5 rounded-full ${status === 'Pending' && 'bg-yellow-500'} ${status === 'In Progress' && 'bg-blue-500'} ${status === 'Completed' && 'bg-green-500'} ${
+                            status === 'Completed' && 'bg-green-500'
+                        } ${status === 'Completed' && 'bg-green-500'} ${status === 'Rejected' && 'bg-red-500'}`}></span>
                     <h2 className="text-sm font-normal ">{status}</h2>
                 </div>
             </td>
 
             <td className="px-4 py-4 text-sm whitespace-nowrap">
-                <button title="Mark Complete" className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none disabled:cursor-not-allowed">
+                {/* Mark as complete button  */}
+                <button
+                    onClick={() => handleStatusChange(_id, status, 'Completed')}
+                    title="Mark Complete"
+                    disabled={status !== 'In Progress'}
+                    className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none disabled:cursor-not-allowed">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
                         <path
                             strokeLinecap="round"
