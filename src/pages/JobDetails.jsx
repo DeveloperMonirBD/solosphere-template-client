@@ -26,7 +26,7 @@ const JobDetails = () => {
         //    setStartDate(new Date(data.deadline));
     };
 
-    const { _id, title, deadline, category, min_price, max_price, description, bid_count, buyer } = job || {};
+    const { _id, title, deadline, category, min_price, max_price, description, buyer } = job || {};
 
     // Handle form submit
     const handleSubmit = async e => {
@@ -49,7 +49,7 @@ const JobDetails = () => {
         // 4. Offer deadline is within sellers deadline validation
         if (compareAsc(new Date(startDate), new Date(deadline)) === 1) return toast.error('Offer a date within deadline');
 
-        const bidData = { price, email, comment, deadline, jobId };
+        const bidData = { price, email, comment, deadline: startDate, jobId };
 
         try {
             // make a post request
@@ -61,7 +61,8 @@ const JobDetails = () => {
             // navigate
             navigate('/my-bids');
         } catch (err) {
-            toast.error(err.message);
+            console.log(err)
+            toast.error(err?.response?.data);
         }
     };
 
