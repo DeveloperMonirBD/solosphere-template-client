@@ -49,7 +49,7 @@ const JobDetails = () => {
         // 4. Offer deadline is within sellers deadline validation
         if (compareAsc(new Date(startDate), new Date(deadline)) === 1) return toast.error('Offer a date within deadline');
 
-        const bidData = { price, email, comment, deadline: startDate, jobId };
+        const bidData = { price, email, comment, deadline: startDate, jobId, title, category, status: 'pending', buyer: buyer?.email};
 
         try {
             // make a post request
