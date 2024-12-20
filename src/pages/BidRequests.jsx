@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 import axios from "axios";
 import BidRequestsTableRow from "../components/BidRequestsTableRow";
+import toast from "react-hot-toast";
 
 const BidRequests = () => {
 
@@ -21,12 +22,14 @@ const BidRequests = () => {
   const handleStatusChange = async (id, prevStatus, status) => {
     if (prevStatus === status || prevStatus === 'Completed') return console.log('Not Allowed')
     try {
-      const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}/bid-status-update/${id}`, {status});
-
+      const { data } = await axios.patch(`${import.meta.env.VITE_API_URL}/bid-status-update/${id}`, { status });
+      
+      toast.success(`Status Changed to ${status}`)
       console.log(data)
       // refresh ui 
       fetchAllBids();
     } catch (err) {
+      toast.error(err.message)
       console.log(err)
     }
     

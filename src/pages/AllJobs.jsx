@@ -4,25 +4,33 @@ import JobCard from '../components/JobCard'
 import axios from 'axios'
 
 const AllJobs = () => {
-  const [jobs, setJobs] = useState([])
-  useEffect(() => {
-    fetchAllJobs()
-  }, [])
+    const [jobs, setJobs] = useState([])
+    const [filter, setFilter] = useState('');
+    const [search, setSearch] = useState('');
+    const [sort, setSort] = useState('');
+    useEffect(() => {
+        const fetchAllJobs = async () => {
+            const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/all-jobs?filter=${filter}&search=${search}&sort=${sort}`);
+            setJobs(data);
+        };
 
-  const fetchAllJobs = async () => {
-    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/jobs`);
-    setJobs(data)
-  }
-  
-  console.log(jobs)
+        fetchAllJobs();
+    }, [filter, search, sort]);
 
+    const handleReset = () => {
+        setFilter('')
+        setSearch('')
+        setSort('')
+    }
   return (
       <div className="container px-6 py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between">
           <div>
               <div className="flex flex-col md:flex-row justify-center items-center gap-5 ">
                   {/* filter by category  */}
                   <div className="w-full">
-                      <select name="category" id="category" className="border p-4 rounded-lg w-full">
+                      <select name="category" id="category" className="border p-4 rounded-lg w-full" onChange={e => setFilter(e.target.value)}
+                      value={filter}
+                      >
                           <option value="">Filter By Category</option>
                           <option value="Web Development">Web Development</option>
                           <option value="Graphics Design">Graphics Design</option>
@@ -31,12 +39,15 @@ const AllJobs = () => {
                   </div>
 
                   {/* search form  */}
-                  <form className="w-full">
+                  <div className="w-full">
                       <div className="flex justify-between p-1 overflow-hidden border rounded-lg    focus-within:ring focus-within:ring-opacity-40 focus-within:border-blue-400 focus-within:ring-blue-300">
                           <input
                               className="px-6 py-2 text-gray-700 placeholder-gray-500 bg-white outline-none focus:placeholder-transparent"
                               type="text"
                               name="search"
+                              //   onBlur={e => setSearch(e.target.value)}
+                              onChange={e => setSearch(e.target.value)}
+                              value={search}
                               placeholder="Enter Job Title"
                               aria-label="Enter Job Title"
                           />
@@ -45,22 +56,26 @@ const AllJobs = () => {
                               Search
                           </button>
                       </div>
-                  </form>
+                  </div>
 
                   {/* sort by deadline  */}
                   <div className="w-full">
-                      <select name="category" id="category" className="border p-4 rounded-md w-full">
+                      <select name="category" id="category" onChange={e => setSort(e.target.value)} className="border p-4 rounded-md w-full"
+                          value={sort}
+                      >
                           <option value="">Sort By Deadline</option>
                           <option value="dsc">Descending Order</option>
                           <option value="asc">Ascending Order</option>
                       </select>
                   </div>
-                  <button className="btn w-full md:w-24">Reset</button>
+                  <button onClick={handleReset} className="btn w-full md:w-24">
+                      Reset
+                  </button>
               </div>
 
               <div className="grid grid-cols-1 gap-8 mt-8 xl:mt-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {jobs.map(job => (
-                    <JobCard key={job._id} job={job} />
+                      <JobCard key={job._id} job={job} />
                   ))}
               </div>
           </div>
